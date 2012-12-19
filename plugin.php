@@ -18,7 +18,8 @@ add_plugin_hook('define_routes', 'terms_of_service_routes');
 
 function terms_of_service_install() 
 {
-	set_option('terms_of_service_version', TERMS_OF_SERVICE_VERSION);	
+	set_option('terms_of_service_version', TERMS_OF_SERVICE_VERSION);
+        
 }
 
 function terms_of_service_uninstall() 
@@ -28,29 +29,16 @@ function terms_of_service_uninstall()
 	delete_option('terms_of_service_privacy_policy');
 }
 
-function terms_of_service_config($post) 
+function terms_of_service_config($args) 
 {
+        $post = $args['post'];
 	set_option('terms_of_service_tos', $post['terms_of_service_tos']);
 	set_option('terms_of_service_privacy_policy', $post['terms_of_service_privacy_policy']);
 }
 
 function terms_of_service_config_form() 
 {
-?>
-		<div id="terms_of_service_settings">
-            <div class="field">
-                <label for="terms_of_service_tos">Terms Of Service:</label>
-                <?php echo textarea(array('name'=>'terms_of_service_tos', 'class'=>'textareainput'), get_option('terms_of_service_tos')); ?>
-				<p class="explanation">Please enter the Terms Of Service for your website.</p>				
-			</div>
-				
-            <div class="field">
-				<label for="terms_of_service_privacy_policy">Privacy Policy:</label>
-                <?php echo textarea(array('name'=>'terms_of_service_privacy_policy', 'class'=>'textareainput'), get_option('terms_of_service_privacy_policy')); ?>
-				<p class="explanation">Please enter the Privacy Policy for your website.</p>			
-            </div>
-		</div>
-<?php
+    include 'config_form.php';
 }
 
 /**
@@ -60,8 +48,9 @@ function terms_of_service_config_form()
  * @param Zend_Controller_Router_Rewrite $router
  * @return void
  **/
-function terms_of_service_routes($router) 
+function terms_of_service_routes($args) 
 {
+     $router = $args['router'];
     $routes = array('termsOfService'    => array(TERMS_OF_SERVICE_TOS_PAGE_PATH, 
                                             array('action'=>'tos')),
                     'privacyPolicy'     => array(TERMS_OF_SERVICE_PRIVACY_POLICY_PAGE_PATH,
